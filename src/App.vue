@@ -1,32 +1,37 @@
+<!--
+
+** Created by Vugar Safarzada (27.09.2022) **
+
+TODO: Yeni tapşırıqların yaradılması üçün bölmə
+TODO: Mövcud tapşırıqların siyahısı
+====================================
+TODO: Yeni tapşırığın yaradılması,
+TODO: Tapşırığı tamamlanmış və tamamlanmamış olaraq işarələmək,
+TODO: Öncədən qeydə alınmış tapşırığı silmək,
+TODO: Tapşırığın başlığını və teqlərin siyahısını redaktə etmək
+====================================
+TODO: Yeni teqlərin öncədən qeydə alınmış teqlər əsasında təyin olunması.
+TODO: Teq ilə taskların filter olunaraq təsvir olunması
+TODO: Teq filteri sıfırlamaq
+
+-->
+
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view/>
+    <router-view />
   </div>
 </template>
 
+<script>
+export default {
+  name: "Task Management",
+  data() {
+    return {}
+  },
+}
+
+</script>
+
 <style lang="scss">
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
 
-nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
 </style>
