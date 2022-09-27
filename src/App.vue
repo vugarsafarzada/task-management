@@ -18,13 +18,17 @@ TODO: Teq filteri sıfırlamaq
 
 <template>
   <div id="app">
-    <router-view />
+    <layout>
+      <router-view />
+    </layout>
   </div>
 </template>
 
 <script>
+import Layout from '@/components/Layout'
+
 export default {
-  name: "Task Management",
+  components: { Layout },
   data() {
     return {}
   },
@@ -33,5 +37,5 @@ export default {
 </script>
 
 <style lang="scss">
-
+@import './styles/global.css';
 </style>
