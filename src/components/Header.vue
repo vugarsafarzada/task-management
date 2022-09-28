@@ -2,12 +2,12 @@
     <div id="header-container" class="flex-row-space-between-center">
         <div class="header-logo no-select">
             <router-link to="/">
-                Task Management
+                <i class="fi fi-rr-edit icon-custom-style"></i> Task Management
             </router-link>
         </div>
         <div class="create-task">
             <router-link to="/create">
-                Create task
+                <i class="fi fi-rs-add icon-custom-style"></i> Create task
             </router-link>
         </div>
     </div>
@@ -19,7 +19,7 @@
 <style scoped>
 #header-container {
     background: var(--color-blue-gradient);
-    width: 100vw;
+    width: 100%;
     height: 60px;
 }
 

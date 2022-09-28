@@ -6,8 +6,8 @@
     --color-main-blue2: #0c3143;
     --color-main-white: #FFF;
     --color-main-grey: #F3F4F6;
-    --color-main-grey2: #D1D5DB;
-    --color-main-grey3: #6B7280;
+    --color-main-grey1: #D1D5DB;
+    --color-main-grey2: #6B7280;
     --color-main-green: #34D399;
     --color-main-green1: #68D391;
     --color-blue-gradient: linear-gradient(90deg, var(--color-main-blue) 0, var(--color-main-blue) 50%, var(--color-main-blue2) 100%);

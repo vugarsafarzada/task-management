@@ -1,4 +1,10 @@
 @import "./base.css";
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-straight/css/uicons-solid-straight.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-brands/css/uicons-brands.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-regular-straight/css/uicons-regular-straight.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-regular-rounded/css/uicons-regular-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-solid-rounded/css/uicons-solid-rounded.css');
+@import url('https://cdn-uicons.flaticon.com/uicons-bold-rounded/css/uicons-bold-rounded.css');
 * {
     margin: 0 auto;
     padding: 0;
@@ -15,16 +21,52 @@ body {
     background-color: var(--color-main-grey3);
 }
 
-a {
+a,
+a>i {
     text-decoration: none;
     color: var(--color-main-green);
     font-weight: 400;
+}
+
+i.icon-custom-style {
+    position: relative;
+    top: 2px;
 }
 
 a:hover {
     text-decoration: none;
     color: var(--color-main-white);
     font-weight: 400;
+}
+
+input,
+textarea {
+    border: none;
+    outline: none;
+    resize: none;
+}
+
+button {
+    cursor: pointer;
+    padding: 10px;
+    border-radius: 6px;
+    border: 2px solid var(--color-main-grey);
+    background-color: var(--color-main-grey1);
+    font-weight: 600;
+}
+
+button.success-btn {
+    color: var(--color-main-white);
+    background-color: var(--color-main-green);
+}
+
+button.disable-btn {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+button:hover {
+    opacity: 0.7;
 }
 
 #app {
@@ -166,4 +208,11 @@ a:hover {
 
 .text-bold {
     font-weight: 700;
+}
+
+.page-container {
+    background-color: var(--color-main-grey);
+    margin: 30px 0 20px 0;
+    padding: 30px;
+    border-radius: 20px;
 }

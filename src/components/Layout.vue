@@ -1,8 +1,9 @@
 <template>
-    <div id="layout-container">
+    <div id="layout-container" class="flex-column-center-center">
         <Header />
-        <slot></slot>
-        footer
+        <div class="page-container">
+            <slot></slot>
+        </div>
     </div>
 </template>
 
