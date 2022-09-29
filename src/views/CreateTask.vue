@@ -1,19 +1,21 @@
 <template>
     <div id="create-task">
         <div class="task-content">
-            <input v-model="taskContent" type="text" class="task-subject-input" placeholder="Task subject">
+            <input v-model="taskContent" type="text" class="task-subject-input" placeholder="Tapşırıq mətni">
             <ul class="tag-list">
-                <li :style="{'color': tag.color, 'border': '1px solid ' + tag.color}" class="tag-item text-bold"
-                    v-for="tag in tagList" :key="tag.name">
-                    <i :style="{'color': tag.color}" class="fi fi-sr-tags icon-custom-style"></i> {{tag.name}}
+                <li :style="{'color': '#' + tag.color, 'border': '1px solid ' +  '#' + tag.color}"
+                    class="tag-item text-bold" v-for="tag in tagList" :key="tag.name">
+                    <i :style="{'color': '#' + tag.color}" class="fi fi-sr-tags icon-custom-style"></i> {{tag.name}}
                 </li>
             </ul>
         </div>
         <div class="buttons-group flex-row-space-between-center">
-            <add-tags @tagList="getTagList"></add-tags>
+            <add-tags :clearInput="clearTags" @tagList="getTagList"></add-tags>
             <div class="create-task-buttons">
-                <button class="cancel-btn">Cancel</button>
-                <button :class="{'disable-btn': !taskContent.trim().length}" class="add-btn">Add task</button>
+                <button class="cancel-btn" @click="clearInputs">Ləğv et</button>
+                <button @click="createNewTask" :class="{'disable-btn': !taskContent.trim().length}" class="add-btn">
+                    Əlavə et
+                </button>
             </div>
         </div>
     </div>
@@ -27,8 +29,10 @@ export default {
     components: { AddTags },
     data() {
         return {
+            taskData: {},
             taskContent: "",
             tagList: [],
+            clearTags: false,
         }
     },
     methods: {
@@ -37,26 +41,56 @@ export default {
                 return { name: item, color: this.randomRgb() }
             });
         },
-        randomRgb() {
-            var o = Math.round, r = Math.random, s = 255;
-            return 'rgb(' + o(r() * s) + ',' + o(r() * s) + ',' + o(r() * s) + ')';
-        },
         createNewTask() {
-        }
+            if (this.taskContent.trim().length) {
+                this.taskData = {
+                    subject: this.taskContent,
+                    tags: this.tagList
+                };
+                if (this.taskData.tags.length > 0) {
+                    this.taskData.tags.forEach(tag => {
+                        tag.name = tag.name?.trim()
+                        this.setLocalStorage(tag, `${this.taskData.subject} -;- false`)
+                    })
+                } else {
+                    this.setLocalStorage({ name: 'non_tag' }, `${this.taskData.subject} -;- false`);
+                }
+                this.clearInputs();
+            }
+        },
+        setLocalStorage(key, data) {
+            if (key.name) {
+                let oldData = localStorage.getItem(key.name);
+                if (!oldData) {
+                    localStorage.setItem(key.name, [data]);
+                    this.setLocalStorage({ name: 'all_tags' }, key.name);
+                } else {
+                    oldData = oldData.split(',');
+                    let newData = [...new Set([...oldData, ...new Set([data])])];
+                    localStorage.setItem(key.name, newData);
+                }
+            }
+        },
+        clearInputs() {
+            this.taskData = {};
+            this.taskContent = "";
+            this.tagList = [];
+            this.clearTags = !this.clearTags;
+        },
+        randomRgb() {
+            return Math.floor(Math.random() * 16777215).toString(16);
+        },
     }
 }
 </script>
 
 <style scoped>
-#create-task {
-    width: 500px;
-}
-
 #create-task .task-subject-input {
     height: 30px;
-    width: 500px;
+    width: 100%;
     font-size: 20px;
     background-color: transparent;
+    border-bottom: 2px solid var(--color-main-grey2);
 }
 
 #create-task .buttons-group {
@@ -78,7 +112,6 @@ export default {
     display: flex;
     flex-wrap: wrap;
     margin-top: 20px;
-    list-style-type: none;
 }
 
 #create-task .tag-list .tag-item {

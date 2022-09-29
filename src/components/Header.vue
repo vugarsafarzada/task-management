@@ -7,7 +7,7 @@
         </div>
         <div class="create-task">
             <router-link to="/create">
-                <i class="fi fi-rs-add icon-custom-style"></i> Create task
+                <i class="fi fi-rs-add icon-custom-style"></i> Yeni tapşırıq
             </router-link>
         </div>
     </div>

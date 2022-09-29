@@ -10,6 +10,7 @@
     --color-main-grey2: #6B7280;
     --color-main-green: #34D399;
     --color-main-green1: #68D391;
+    --color-main-red: rgb(240, 110, 110);
     --color-blue-gradient: linear-gradient(90deg, var(--color-main-blue) 0, var(--color-main-blue) 50%, var(--color-main-blue2) 100%);
     /* Font Format */
     --font-size-default: 15px;

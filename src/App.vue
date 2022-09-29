@@ -2,13 +2,13 @@
 
 ** Created by Vugar Safarzada (27.09.2022) **
 
-TODO: Yeni tapşırıqların yaradılması üçün bölmə
-TODO: Mövcud tapşırıqların siyahısı
+DONE: Yeni tapşırıqların yaradılması üçün bölmə
+DONE: Mövcud tapşırıqların siyahısı
 ====================================
-TODO: Yeni tapşırığın yaradılması,
-TODO: Tapşırığı tamamlanmış və tamamlanmamış olaraq işarələmək,
-TODO: Öncədən qeydə alınmış tapşırığı silmək,
-TODO: Tapşırığın başlığını və teqlərin siyahısını redaktə etmək
+DONE: Yeni tapşırığın yaradılması,
+DONE: Tapşırığı tamamlanmış və tamamlanmamış olaraq işarələmək,
+DONE: Öncədən qeydə alınmış tapşırığı silmək,
+DONE: Tapşırığın başlığını və teqlərin siyahısını redaktə etmək
 ====================================
 TODO: Yeni teqlərin öncədən qeydə alınmış teqlər əsasında təyin olunması.
 TODO: Teq ilə taskların filter olunaraq təsvir olunması

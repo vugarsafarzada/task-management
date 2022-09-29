@@ -1,7 +1,7 @@
 <template>
     <div class="add-tag">
         <button v-if="!tagTrigger" @click="tagTrigger = true">
-            <i class="fi fi-sr-tags icon-custom-style"></i> Add tag
+            <i class="fi fi-sr-tags icon-custom-style"></i> Teq artır
         </button>
         <div v-else>
             <input v-model="tags" class="tags-input" placeholder="Vergül ilə ayırın">
@@ -15,12 +15,18 @@
 <script>
 export default {
     name: "AddTags",
+    props: ['clearInput'],
     data() {
         return {
             tagTrigger: false,
             tagList: [],
             tagDebounce: null,
             tags: '',
+        }
+    },
+    computed: {
+        clearDataTrigger() {
+            return this.clearInput;
         }
     },
     methods: {
@@ -61,6 +67,10 @@ export default {
         },
         tagList(val) {
             this.$emit('tagList', val);
+        },
+        clearDataTrigger() {
+            this.tags = '';
+            this.tagList = [];
         }
     }
 }

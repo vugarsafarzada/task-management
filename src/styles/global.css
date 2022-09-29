@@ -11,7 +11,7 @@
     margin-block: 0;
     margin-inline: 0;
     color: var(--color-main-black);
-    transition-duration: 0.1s;
+    /* transition-duration: 0.1s; */
 }
 
 body {
@@ -72,6 +72,10 @@ button:hover {
 #app {
     background-color: var(--color-main-white);
     min-height: 100vh;
+}
+
+li {
+    list-style: none;
 }
 
 .no-select {
@@ -202,17 +206,15 @@ button:hover {
     align-items: flex-start;
 }
 
-.box-shadow-inside {
-    box-shadow: rgba(50, 50, 93, 0.25) 0 30px 60px -12px inset, rgba(0, 0, 0, 0.3) 0 18px 36px -18px inset;
-}
-
 .text-bold {
     font-weight: 700;
 }
 
 .page-container {
     background-color: var(--color-main-grey);
+    border: 2px solid var(--color-main-grey1);
     margin: 30px 0 20px 0;
     padding: 30px;
     border-radius: 20px;
+    width: 700px;
 }
