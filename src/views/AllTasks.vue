@@ -59,7 +59,7 @@
                             </div>
                         </li>
                         <li class="tag-item">
-                            <div @click="addNewTagTrigger = true" v-if="!addNewTagTrigger">
+                            <div class="add-new-tag-btn" @click="addNewTagTrigger = true" v-if="!addNewTagTrigger">
                                 <i class="fi fi-br-add icon-custom-style"></i>
                                 Yeni teq
                             </div>
@@ -67,6 +67,7 @@
                                 <input title="'Enter' yada 'Vergüldən' istifadə edin" @blur="addNewTagTrigger = false"
                                     ref="focusHere" type="text" @keypress="addNewTagHandler" v-model="newTag"
                                     placeholder="Teq əlavə et">
+                                   <span v-if="editedTask.newTagsList.length < 1" class="add-tag-info">'Enter' yada 'Vergüldən' istifadə edin</span>
                             </div>
                         </li>
                     </div>
@@ -311,7 +312,8 @@ export default {
 
 #all-tasks-container .tasks-list .task-item .task-header .task-title {
     display: flex;
-    padding: 10px 10px;
+    overflow-x: hidden;
+    padding: 10px 20px;
 }
 
 #all-tasks-container .tasks-list .task-item .task-header .task-title h3 {
@@ -344,13 +346,17 @@ export default {
     width: 200px;
     margin-top: 10px;
     padding: 5px;
+    border-radius: 6px;
     color: var(--color-main-white);
 }
 
 #all-tasks-container .tasks-list .task-item .task-header .task-status-edit {
-    font-size: 12x;
+    font-size: 15px;
     width: 230px;
-    padding: 5px;
+    padding: 10px;
+    display: flex;
+    flex-direction: row;
+    align-items: center
 }
 
 #all-tasks-container .tasks-list .task-item .task-header .task-status-edit input[type="checkbox"] {
@@ -369,7 +375,18 @@ export default {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
+    align-items: flex-end;
     width: 680px;
+}
+
+#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn i{
+    color: var(--color-main-red);
+}
+
+#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn{
+    background-color: var(--color-main-white);
+    color: var(--color-main-red);
+    border: 2px solid var(--color-main-red);
 }
 
 #all-tasks-container .tasks-list .task-item .tags-list-edit .tag-edit-section {
@@ -401,6 +418,12 @@ export default {
 #all-tasks-container .tasks-list .add-new-tag-edit input::placeholder {
     color: var(--color-main-white);
     opacity: 0.8;
+}
+
+#all-tasks-container .tasks-list .add-new-tag-edit .add-tag-info {
+    color: var(--color-main-white);
+    border-left: 2px solid var(--color-main-white);
+    padding-left: 10px;
 }
 
 #all-tasks-container .tasks-list .add-new-tag-edit input {

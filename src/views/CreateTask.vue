@@ -1,7 +1,11 @@
 <template>
     <div id="create-task">
         <div class="task-content">
-            <input v-model="taskContent" type="text" class="task-subject-input" placeholder="Tapşırıq mətni">
+            <input :maxlength="maxContentLength" v-model="taskContent" type="text" class="task-subject-input" placeholder="Tapşırıq mətni">
+            <div style="float: right">{{taskContent.length}}/{{maxContentLength}}</div>
+            <div v-if="!taskContent.length" style="float: left; font-size: 12px">
+                Qeyd: Əgər eyni anda birdən çox tapşırıq yaratmaq istəsəniz, tapşırıq mətnləri arasına vergül əlavə etməyiniz kifayətdir!
+            </div>
             <ul class="tag-list">
                 <li :style="{'color': '#' + tag.color, 'border': '1px solid ' +  '#' + tag.color}"
                     class="tag-item text-bold" v-for="tag in tagList" :key="tag.name">
@@ -23,7 +27,6 @@
 
 <script>
 import AddTags from '@/components/AddTags'
-
 export default {
     name: "CreateTask",
     components: { AddTags },
@@ -33,6 +36,7 @@ export default {
             taskContent: "",
             tagList: [],
             clearTags: false,
+            maxContentLength: 120,
         }
     },
     methods: {
@@ -56,6 +60,7 @@ export default {
                     this.setLocalStorage({ name: 'non_tag' }, `${this.taskData.subject} -;- false`);
                 }
                 this.clearInputs();
+                window.alert('Yeni tapşırıq əlavə edildi!')
             }
         },
         setLocalStorage(key, data) {

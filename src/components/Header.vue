@@ -6,8 +6,11 @@
             </router-link>
         </div>
         <div class="create-task">
-            <router-link to="/create">
+            <router-link v-if="$route.path !=='/create'" to="/create">
                 <i class="fi fi-rs-add icon-custom-style"></i> Yeni tapşırıq
+            </router-link>
+            <router-link v-if="$route.path !=='/'" to="/">
+                <i class="fi fi-rr-apps-add icon-custom-style"></i> Bütün tapşırıqlar
             </router-link>
         </div>
     </div>
