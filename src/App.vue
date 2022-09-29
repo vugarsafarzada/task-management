@@ -10,9 +10,9 @@ DONE: Tapşırığı tamamlanmış və tamamlanmamış olaraq işarələmək,
 DONE: Öncədən qeydə alınmış tapşırığı silmək,
 DONE: Tapşırığın başlığını və teqlərin siyahısını redaktə etmək
 ====================================
-TODO: Yeni teqlərin öncədən qeydə alınmış teqlər əsasında təyin olunması.
-TODO: Teq ilə taskların filter olunaraq təsvir olunması
-TODO: Teq filteri sıfırlamaq
+DONE: Yeni teqlərin öncədən qeydə alınmış teqlər əsasında təyin olunması.
+DONE: Teq ilə taskların filter olunaraq təsvir olunması
+DONE: Teq filteri sıfırlamaq
 
 -->
 

@@ -1,10 +1,12 @@
 <template>
     <div id="create-task">
         <div class="task-content">
-            <input :maxlength="maxContentLength" v-model="taskContent" type="text" class="task-subject-input" placeholder="Tapşırıq mətni">
+            <input :maxlength="maxContentLength" v-model="taskContent" type="text" class="task-subject-input"
+                placeholder="Tapşırıq mətni">
             <div style="float: right">{{taskContent.length}}/{{maxContentLength}}</div>
-            <div v-if="!taskContent.length" style="float: left; font-size: 12px">
-                Qeyd: Əgər eyni anda birdən çox tapşırıq yaratmaq istəsəniz, tapşırıq mətnləri arasına vergül əlavə etməyiniz kifayətdir!
+            <div style="float: left; font-size: 12px">
+                Qeyd: Əgər eyni anda birdən çox tapşırıq yaratmaq istərsəniz, tapşırıq mətnləri arasına vergül əlavə
+                etməyiniz kifayətdir!
             </div>
             <ul class="tag-list">
                 <li :style="{'color': '#' + tag.color, 'border': '1px solid ' +  '#' + tag.color}"

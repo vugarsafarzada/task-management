@@ -1,33 +1,72 @@
 <template>
     <div id="all-tasks-container">
         <div class="header-section flex-row-start-center">
-            <h2 v-if="allTaskWithTag.length">Bütün tapşırıqlar: ({{allTaskWithTag.length}})</h2>
-            <h2 v-else>
-                Tapşırıq siyahısı boşdu,
-                <router-link to="/create">
-                    <b>
-                        <u style="color:var(--color-main-red)">
-                            yeni tapşırıq yarat!
-                        </u>
-                        <i style="color:var(--color-main-red); right: 5px"
-                            class=" fi fi-rr-rocket-lunch icon-custom-style"></i>
-                    </b>
-                </router-link>
-            </h2>
+            <div v-if="allTaskWithTag.length" class="flex-row-space-between-center" style="width: 100%">
+                <div>
+                    <h2 v-if="!filterTagList.length">Bütün tapşırıqlar: ({{showingTasks.length}})</h2>
+                    <h2 v-else>Filter nəticəsi: ({{showingTasks.length}})</h2>
+                </div>
+                <div class="filter-section" @click="filterBoxTrigger = !filterBoxTrigger">
+                    <span class="filter-box-trigger"
+                        :style="{'color': filterTagList.length ? 'var(--color-main-green)' : ''}">Filter</span>
+                    <i class="fi fi-ss-settings-sliders icon-custom-style"
+                        :style="{'color': filterTagList.length ? 'var(--color-main-green)' : ''}"></i>
+                </div>
+            </div>
+            <div v-else class="flex-row-center-center" style="width: 100%; height: 100px">
+                <h2>
+                    Tapşırıq siyahısı boşdu,
+                    <router-link to="/create">
+                        <b>
+                            <u style="color:var(--color-main-red)">
+                                yeni tapşırıq yarat!
+                            </u>
+                            <i style="color:var(--color-main-red); right: 5px"
+                                class=" fi fi-rr-rocket-lunch icon-custom-style"></i>
+                        </b>
+                    </router-link>
+                </h2>
+            </div>
+        </div>
+        <div v-if="filterBoxTrigger" class="filter-box">
+            <ul class="tag-edit-section flex-row-start-center no-select">
+                <li @click.stop="deleteFilterTag(tag_item)" class="tag-item"
+                    v-for="(tag_item, tag_index) in filterTagList" :key="tag_index">
+                    <div v-if="tag_item !== 'non_tag'">
+                        <i class="fi fi-rr-trash icon-custom-style"></i>
+                        {{tag_item}} &nbsp;
+                    </div>
+                </li>
+                <li class="tag-item">
+                    <div class="add-new-tag-btn" @click.stop="addNewFilterTrigger = true" v-if="!addNewFilterTrigger">
+                        <i class="fi fi-br-add icon-custom-style"></i>
+                        Filter təyin ed
+                    </div>
+                    <div class="add-new-tag-edit" v-else>
+                        <input title="'Enter' yada 'Vergüldən' istifadə edin" @blur="addNewFilterTrigger = false"
+                            type="text" @keypress="addNewFilterHandler" v-model="newFilter" placeholder="Teq əlavə et">
+                    </div>
+                </li>
+            </ul>
+            <div class="filter-btn-group">
+                <button @click="filterTagList = []">
+                    Təmizlə
+                </button>
+            </div>
         </div>
         <ul class="tasks-list no-select">
-            <li class="task-item" v-for="(item, index) in allTaskWithTag" :key="index">
+            <li @click="editMode = index" class="task-item" v-for="(item, index) in showingTasks" :key="index">
                 <div class="task-header flex-row-center-flex-start">
-                    <div @click="editMode = index" v-if="editMode !== index" class="task-title">
+                    <div v-if="editMode !== index" class="task-title">
                         <i class="fi fi-ss-thumbtack icon-custom-style"></i>
                         <h3>{{item.task.split(splitterKey)[0]}}</h3>
                     </div>
                     <div v-else class="task-title-edit">
                         <i class="fi fi-ss-trash icon-custom-style"
-                            @click="deleteTask(item?.task?.split(splitterKey)[0])"></i>
+                            @click.stop="deleteTask(item?.task?.split(splitterKey)[0])"></i>
                         <input type="text" name="Task name" v-model="editedTask.name">
                     </div>
-                    <div @click="editMode = index" v-if="editMode !== index" class="task-status flex-row-center-center"
+                    <div v-if="editMode !== index" class="task-status flex-row-center-center"
                         :style="{'background-color': !checkStatus(item.task) ? 'var(--color-main-red)': 'var(--color-main-green)'}">
                         Status:&nbsp;
                         <span class="text-bold">
@@ -42,7 +81,8 @@
                     </div>
                 </div>
                 <ul v-if="editMode !== index" class="tags-list">
-                    <li class="tag-item" v-for="(item, index) in item.tags" :key="index">
+                    <li @click.stop="setTagFilter(item)" class="tag-item" v-for="(item, index) in item.tags"
+                        :key="index">
                         <div v-if="item !== 'non_tag'">
                             <i class="fi fi-sr-tags icon-custom-style"></i>
                             {{item}} &nbsp;
@@ -51,7 +91,7 @@
                 </ul>
                 <ul v-else class="tags-list-edit flex-row-space-between-center">
                     <div class="tag-edit-section flex-row-start-center">
-                        <li @click="deleteTag(tag_item)" class="tag-item"
+                        <li @click.stop="deleteTag(tag_item)" class="tag-item"
                             v-for="(tag_item, tag_index) in editedTask.tagList" :key="tag_index">
                             <div v-if="tag_item !== 'non_tag'">
                                 <i class="fi fi-rr-trash icon-custom-style"></i>
@@ -59,7 +99,7 @@
                             </div>
                         </li>
                         <li class="tag-item">
-                            <div class="add-new-tag-btn" @click="addNewTagTrigger = true" v-if="!addNewTagTrigger">
+                            <div class="add-new-tag-btn" @click.stop="addNewTagTrigger = true" v-if="!addNewTagTrigger">
                                 <i class="fi fi-br-add icon-custom-style"></i>
                                 Yeni teq
                             </div>
@@ -67,13 +107,14 @@
                                 <input title="'Enter' yada 'Vergüldən' istifadə edin" @blur="addNewTagTrigger = false"
                                     ref="focusHere" type="text" @keypress="addNewTagHandler" v-model="newTag"
                                     placeholder="Teq əlavə et">
-                                   <span v-if="editedTask.newTagsList.length < 1" class="add-tag-info">'Enter' yada 'Vergüldən' istifadə edin</span>
+                                <span v-if="editedTask.newTagsList.length < 1" class="add-tag-info">'Enter' yada
+                                    'Vergüldən' istifadə edin</span>
                             </div>
                         </li>
                     </div>
                     <div class="edit-btns-group">
-                        <button class="cancel-btn" @click="editMode = false">Ləğv et</button>
-                        <button class="save-btn" @click="saveEdit">Yadda saxla</button>
+                        <button class="cancel-btn" @click.stop="editMode = false">Ləğv et</button>
+                        <button class="save-btn" @click.stop="saveEdit">Yadda saxla</button>
                     </div>
                 </ul>
             </li>
@@ -82,8 +123,10 @@
 </template>
 
 <script>
+import AddTags from "@/components/AddTags";
 export default {
     name: "AllTasks",
+    components: { AddTags },
     data() {
         return {
             splitterKey: '-;-',
@@ -98,8 +141,14 @@ export default {
                 newTagsList: [],
             },
             addNewTagTrigger: false,
+            addNewFilterTrigger: false,
             newTag: '',
-            defaultTaskNameAndStatus: ''
+            newFilter: '',
+            defaultTaskNameAndStatus: '',
+            filterTagList: [],
+            filterBoxTrigger: false,
+            allTaskWithFilters: [],
+            showingTasks: []
         }
     },
     computed: {
@@ -130,12 +179,18 @@ export default {
                 })
             })
         },
+        setTagFilter(tag) {
+            if (!this.filterTagList.includes(tag)) {
+                this.filterTagList.push(tag);
+            }
+            this.filterBoxTrigger = true;
+        },
         checkStatus(val) {
             return Boolean(val?.split(this.splitterKey)[1]?.trim() === 'true')
         },
         deleteTask(task_name) {
             const checkDeleteRequest = window.confirm(`( ${task_name} ) adlı tapşırıqı silmək istədiyinizdən əminsinizmi?`);
-            if (checkDeleteRequest == true) {
+            if (checkDeleteRequest === true) {
                 this.deleteTaskController();
                 this.editMode = false;
             }
@@ -147,17 +202,23 @@ export default {
                 this.editedTask.tagList.splice(targetIndex, 1)
             }
         },
+        deleteFilterTag(tag_name) {
+            const targetIndex = this.filterTagList.indexOf(tag_name);
+            if (targetIndex > -1) {
+                this.filterTagList.splice(targetIndex, 1)
+            }
+        },
         saveEdit() {
             let taskName = `${this.editedTask.name.trim()} -;- ${this.editedTask.status}`;
-            this.defaultTaskNameAndStatus = this.allTaskWithTag[this.editedTask.id].task;
-            this.allTaskWithTag[this.editedTask.id].task = taskName;
-            this.allTaskWithTag[this.editedTask.id].tags = this.editedTask.tagList;
-            if (!this.allTaskWithTag[this.editedTask.id].tags.length) {
-                this.allTaskWithTag[this.editedTask.id].tags.push("non_tag");
+            this.defaultTaskNameAndStatus = this.showingTasks[this.editedTask.id].task;
+            this.showingTasks[this.editedTask.id].task = taskName;
+            this.showingTasks[this.editedTask.id].tags = this.editedTask.tagList;
+            if (!this.showingTasks[this.editedTask.id].tags.length) {
+                this.showingTasks[this.editedTask.id].tags.push("non_tag");
                 this.setLocalStorage({ name: 'non_tag' }, taskName);
             }
 
-            this.editTaskNameAndStatusController(this.allTaskWithTag[this.editedTask.id]);
+            this.editTaskNameAndStatusController(this.showingTasks[this.editedTask.id]);
             this.deleteTagsController(taskName);
             this.addNewTagsController(taskName);
             this.editMode = null;
@@ -182,6 +243,14 @@ export default {
                     this.editedTask.tagList.push(this.newTag);
                 }
                 this.newTag = "";
+            }
+        },
+        addNewFilterHandler(e) {
+            if (e.key === "Enter" || e.key === ",") {
+                if (!this.filterTagList.includes(this.newFilter.trim()) && this.newFilter.trim().length > 0) {
+                    this.filterTagList.push(this.newFilter);
+                }
+                this.newFilter = "";
             }
         },
         deleteTagsController(taskName) {
@@ -211,8 +280,8 @@ export default {
             })
         },
         deleteTaskController() {
-            const targetTaskName = `${this.allTaskWithTag[this.editedTask.id].task}`;
-            const targetTags = this.allTaskWithTag[this.editedTask.id].tags;
+            const targetTaskName = `${this.showingTasks[this.editedTask.id].task}`;
+            const targetTags = this.showingTasks[this.editedTask.id].tags;
             targetTags.forEach(item => {
                 let target = localStorage.getItem(item)?.split(',');
                 if (target?.length === 1) {
@@ -224,11 +293,13 @@ export default {
                         localStorage.setItem('all_tags', reEditedAllTags);
                     }
                 } else {
-                    let index = target.indexOf(targetTaskName);
+                    let index = target?.indexOf(targetTaskName);
                     if (index > -1) {
                         target.splice(index, 1);
                     }
-                    localStorage.setItem(item, target.join());
+                    if (target) {
+                        localStorage.setItem(item, target.join());
+                    }
                 }
             })
             window.location.reload();
@@ -249,10 +320,30 @@ export default {
                 })
             }
         },
+        showTasksByFilters(filters) {
+            let allTasksWithFilters = [];
+            filters.forEach(target_tag => {
+                if (!allTasksWithFilters.length) {
+                    const result = this.allTaskWithTag.filter(item => {
+                        return item.tags.includes(target_tag)
+                    });
+                    if (result.length) {
+                        allTasksWithFilters = result;
+                    }
+                } else {
+                    const result = allTasksWithFilters.filter(item => {
+                        return item.tags.includes(target_tag)
+                    });
+                    allTasksWithFilters = result;
+                }
 
+            })
+            this.allTaskWithFilters = allTasksWithFilters;
+        }
     },
     mounted() {
         this.getAllTasks()
+        this.showingTasks = this.allTaskWithTag;
     },
     watch: {
         editMode(val) {
@@ -261,9 +352,9 @@ export default {
             this.addNewTagTrigger = false;
 
             this.editedTask.id = val;
-            this.editedTask.name = this.allTaskWithTag[val]?.task?.split(this.splitterKey)[0];
-            this.editedTask.status = this.checkStatus(this.allTaskWithTag[val]?.task)
-            this.editedTask.tagList = this.allTaskWithTag[val]?.tags.map(item => item.trim());
+            this.editedTask.name = this.showingTasks[val]?.task?.split(this.splitterKey)[0];
+            this.editedTask.status = this.checkStatus(this.showingTasks[val]?.task)
+            this.editedTask.tagList = this.showingTasks[val]?.tags.map(item => item.trim());
             if (val === null) {
                 window.location.reload();
             }
@@ -279,6 +370,20 @@ export default {
             if (val === ',') {
                 this.newTag = "";
             }
+        },
+        newFilter(val) {
+            if (val === ',') {
+                this.newFilter = "";
+            }
+        },
+        filterTagList(val) {
+            if (val.length > 0) {
+                this.showTasksByFilters(val)
+                this.showingTasks = this.allTaskWithFilters;
+            } else {
+                this.showTasksByFilters([])
+                this.showingTasks = this.allTaskWithTag;
+            }
         }
     }
 }
@@ -291,6 +396,87 @@ export default {
 
 #all-tasks-container .header-section i {
     padding: 10px;
+}
+
+
+#all-tasks-container .header-section .filter-section .filter-box-trigger,
+#all-tasks-container .header-section .filter-section>i {
+    color: var(--color-main-grey2);
+    font-weight: 600;
+}
+
+
+#all-tasks-container .filter-box {
+    background-color: var(--color-main-grey);
+    padding: 10px 5px;
+    border-radius: 5px;
+    border: 1px solid var(--color-main-grey1);
+    min-height: 100px;
+}
+
+#all-tasks-container .filter-btn-group {
+    display: flex;
+    justify-content: flex-end;
+}
+
+
+#all-tasks-container .filter-box .tag-edit-section {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#all-tasks-container .filter-box .tag-item div i {
+    color: var(--color-main-white)
+}
+
+#all-tasks-container .filter-box .tag-item div {
+    font-size: 13px;
+    padding: 5px 10px;
+    border-radius: 10px;
+    margin: 3px 2px;
+    background-color: var(--color-main-green);
+    border: 2px solid var(--color-main-white);
+    color: var(--color-main-white);
+    font-weight: bold;
+    cursor: pointer;
+}
+
+#all-tasks-container .filter-box .add-new-tag-edit input::placeholder {
+    color: var(--color-main-white);
+    opacity: 0.8;
+}
+
+#all-tasks-container .filter-box .add-new-tag-edit .add-tag-info {
+    color: var(--color-main-white);
+    border-left: 2px solid var(--color-main-white);
+    padding-left: 10px;
+}
+
+#all-tasks-container .filter-box .add-new-tag-edit input {
+    width: 100px;
+    background-color: var(--color-main-green) !important;
+    color: var(--color-main-white);
+    font-weight: bold;
+    font-size: 13px;
+    text-align: center;
+}
+
+#all-tasks-container .filter-box div.add-new-tag-btn i {
+    color: var(--color-main-green) !important;
+}
+
+#all-tasks-container .filter-box div.add-new-tag-btn {
+    background-color: var(--color-main-white);
+    color: var(--color-main-green);
+    border: 2px solid var(--color-main-green);
+}
+
+
+
+#all-tasks-container .header-section .filter-section:hover .filter-box-trigger,
+#all-tasks-container .header-section .filter-section:hover i {
+    color: var(--color-main-blue);
+    cursor: pointer;
 }
 
 #all-tasks-container .tasks-list .task-item {
@@ -379,11 +565,11 @@ export default {
     width: 680px;
 }
 
-#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn i{
+#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn i {
     color: var(--color-main-red);
 }
 
-#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn{
+#all-tasks-container .tasks-list .task-item .tags-list-edit .tag-item div.add-new-tag-btn {
     background-color: var(--color-main-white);
     color: var(--color-main-red);
     border: 2px solid var(--color-main-red);
@@ -413,6 +599,7 @@ export default {
     background-color: var(--color-main-grey);
     border: 2px solid var(--color-main-white);
     font-weight: bolder;
+    z-index: 10;
 }
 
 #all-tasks-container .tasks-list .add-new-tag-edit input::placeholder {

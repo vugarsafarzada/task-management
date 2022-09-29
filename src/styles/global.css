@@ -206,6 +206,20 @@ li {
     align-items: flex-start;
 }
 
+.flex-row-end-end {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
+.flex-column-end-end {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: flex-end;
+}
+
 .text-bold {
     font-weight: 700;
 }
