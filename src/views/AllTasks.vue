@@ -2,7 +2,7 @@
     <div id="all-tasks-container">
         <div class="header-section flex-row-start-center">
             <div v-if="allTaskWithTag.length" class="flex-row-space-between-center" style="width: 100%">
-                <div>
+                <div class="main-title-box">
                     <h2 v-if="!filterTagList.length">Bütün tapşırıqlar: ({{showingTasks.length}})</h2>
                     <h2 v-else>Filter nəticəsi: ({{showingTasks.length}})</h2>
                 </div>
@@ -33,7 +33,7 @@
                 <li @click.stop="deleteFilterTag(tag_item)" class="tag-item"
                     v-for="(tag_item, tag_index) in filterTagList" :key="tag_index">
                     <div v-if="tag_item !== 'non_tag'">
-                        <i class="fi fi-rr-trash icon-custom-style"></i>
+                        <i class="fi fi-ss-cross-circle icon-custom-style"></i>
                         {{tag_item}} &nbsp;
                     </div>
                 </li>
@@ -59,7 +59,7 @@
                 <div class="task-header flex-row-center-flex-start">
                     <div v-if="editMode !== index" class="task-title">
                         <i class="fi fi-ss-thumbtack icon-custom-style"></i>
-                        <h3>{{item.task.split(splitterKey)[0]}}</h3>
+                        <h3 class="task-name">{{item.task.split(splitterKey)[0]}}</h3>
                     </div>
                     <div v-else class="task-title-edit">
                         <i class="fi fi-ss-trash icon-custom-style"
@@ -69,13 +69,13 @@
                     <div v-if="editMode !== index" class="task-status flex-row-center-center"
                         :style="{'background-color': !checkStatus(item.task) ? 'var(--color-main-red)': 'var(--color-main-green)'}">
                         Status:&nbsp;
-                        <span class="text-bold">
+                        <span class="text-bold status">
                             {{!checkStatus(item.task) ? 'Tamam deyil' : 'Tamamlandı'}}
                         </span>
                     </div>
                     <div v-else class="task-status-edit flex-row-center-center">
                         <input type="checkbox" v-model="editedTask.status">
-                        <span class="text-bold">
+                        <span class="status-edit text-bold">
                             {{editedTask.status ? 'Tamamlandı': "Tamam deyil"}}
                         </span>
                     </div>
@@ -107,8 +107,9 @@
                                 <input title="'Enter' yada 'Vergüldən' istifadə edin" @blur="addNewTagTrigger = false"
                                     ref="focusHere" type="text" @keypress="addNewTagHandler" v-model="newTag"
                                     placeholder="Teq əlavə et">
-                                <span v-if="editedTask.newTagsList.length < 1" class="add-tag-info">'Enter' yada
-                                    'Vergüldən' istifadə edin</span>
+                                <span v-if="editedTask.newTagsList.length < 1" class="add-tag-info hide-on-mobile">
+                                    'Enter' yad 'Vergüldən' istifadə edin
+                                </span>
                             </div>
                         </li>
                     </div>
@@ -350,7 +351,7 @@ export default {
             this.editedTask.deletedTagsList = [];
             this.newTag = "";
             this.addNewTagTrigger = false;
-
+            this.deletedTagsList = [];
             this.editedTask.id = val;
             this.editedTask.name = this.showingTasks[val]?.task?.split(this.splitterKey)[0];
             this.editedTask.status = this.checkStatus(this.showingTasks[val]?.task)
@@ -384,6 +385,9 @@ export default {
                 this.showTasksByFilters([])
                 this.showingTasks = this.allTaskWithTag;
             }
+        },
+        showingTasks(val) {
+            document.title = `Task Management (${this.showingTasks.length})`
         }
     }
 }
@@ -641,5 +645,63 @@ export default {
     cursor: pointer;
     background-color: var(--color-main-white);
     border: 2px solid var(--color-main-black);
+}
+
+
+@media screen and (max-width: 800px) {
+    #all-tasks-container {
+        padding: 15px;
+    }
+
+    #all-tasks-container .tasks-list h3.task-name {
+        font-size: 15px;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header div {
+        width: 100%;
+    }
+
+    #all-tasks-container .tasks-list .task-item .tags-list,
+    #all-tasks-container .tasks-list .task-item .tags-list-edit {
+        width: 80vw;
+    }
+
+    #all-tasks-container .main-title-box h2 {
+        font-size: 18px;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header .task-title-edit input {
+        margin-left: 10px;
+        margin-bottom: 30px;
+        font-size: 12px;
+        width: 50vw;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header .task-status-edit {
+        font-size: 15px;
+        width: 100%;
+        margin-bottom: 10px;
+        padding: 5px;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header .task-status-edit .edit-status {
+        font-size: 10px;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+    }
+
+    #all-tasks-container .tasks-list .task-item .task-header .task-title {
+        display: flex;
+        overflow-x: hidden;
+        padding: 0;
+    }
+
+    #all-tasks-container .tasks-list .task-status {
+        width: 140px !important;
+    }
 }
 </style>

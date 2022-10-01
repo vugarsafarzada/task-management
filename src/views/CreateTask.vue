@@ -3,8 +3,8 @@
         <div class="task-content">
             <input :maxlength="maxContentLength" v-model="taskContent" type="text" class="task-subject-input"
                 placeholder="Tapşırıq mətni">
-            <div style="float: right">{{taskContent.length}}/{{maxContentLength}}</div>
-            <div style="float: left; font-size: 12px">
+            <div class="" style="float: right">{{taskContent.length}}/{{maxContentLength}}</div>
+            <div v-if="!taskContent.length" class="hide-on-mobile" style="float: left; font-size: 12px">
                 Qeyd: Əgər eyni anda birdən çox tapşırıq yaratmaq istərsəniz, tapşırıq mətnləri arasına vergül əlavə
                 etməyiniz kifayətdir!
             </div>
@@ -40,6 +40,9 @@ export default {
             clearTags: false,
             maxContentLength: 120,
         }
+    },
+    mounted() {
+        document.title = `Yeni tapşırıq`;
     },
     methods: {
         getTagList(data) {
@@ -133,5 +136,34 @@ export default {
     color: var(--color-main-black) !important;
     background-color: var(--color-main-white);
     cursor: pointer;
+}
+
+@media screen and (max-width: 800px) {
+    #create-task {
+        padding: 10px;
+        overflow: hidden;
+    }
+
+    #create-task .task-subject-input {
+        display: flex;
+        font-size: 15px;
+    }
+
+    #create-task .tag-list {
+        padding-top: 20px;
+    }
+
+    #create-task .buttons-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #create-task .create-task-buttons button {
+        margin: 20px 10px 10px 10px;
+    }
+
+    #create-task .task-content {
+        padding: 10px;
+    }
 }
 </style>

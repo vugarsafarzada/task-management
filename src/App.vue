@@ -32,6 +32,9 @@ export default {
   data() {
     return {}
   },
+  mounted() {
+    document.title = "Task Management";
+  }
 }
 
 </script>

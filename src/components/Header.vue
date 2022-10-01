@@ -7,10 +7,11 @@
         </div>
         <div class="create-task">
             <router-link v-if="$route.path !=='/create'" to="/create">
-                <i class="fi fi-rs-add icon-custom-style"></i> Yeni tapşırıq
+                <i class="fi fi-rs-add icon-custom-style"></i> <span class="hide-on-mobile">Yeni tapşırıq</span>
             </router-link>
             <router-link v-if="$route.path !=='/'" to="/">
-                <i class="fi fi-rr-apps-add icon-custom-style"></i> Bütün tapşırıqlar
+                <i class="fi fi-rr-apps-add icon-custom-style"></i> <span class="hide-on-mobile">Bütün
+                    tapşırıqlar</span>
             </router-link>
         </div>
     </div>
@@ -36,7 +37,20 @@
     font-weight: 700;
 }
 
-#header-container .create-task a {
+#header-container .create-task a span {
     font-weight: 500;
+    color: var(--color-main-white);
+}
+
+@media screen and (max-width: 800px) {
+    #header-container {
+        width: 100%;
+    }
+
+    #header-container .header-logo a {
+        color: var(--color-main-white);
+        font-size: 18px;
+        font-weight: 700;
+    }
 }
 </style>

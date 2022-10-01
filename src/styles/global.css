@@ -98,6 +98,11 @@ li {
     }
     #app .page-container {
         padding: 0;
+        width: 90vw;
+    }
+    #app {
+        margin: 0;
+        position: relative;
     }
 }
 
